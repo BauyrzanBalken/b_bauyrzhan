@@ -1,0 +1,300 @@
+{\rtf1\ansi\ansicpg1251\deff0\nouicompat\deflang1049{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset204 Calibri;}}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\b\f0\fs44\lang9 Exercise-1\b0\fs22\par
+CREATE TABLE customers (\par
+    customer_id INTEGER PRIMARY KEY,\par
+    city VARCHAR(50),\par
+    status VARCHAR(20)   \par
+);\par
+CREATE TABLE products (\par
+    product_id INTEGER PRIMARY KEY,\par
+    category VARCHAR(50),\par
+    price NUMERIC(10, 2),\par
+    stock_quantity INTEGER\par
+);\par
+CREATE TABLE orders (\par
+    order_id INTEGER PRIMARY KEY,\par
+    customer_id INTEGER,        \par
+    order_date TIMESTAMP        \par
+);\par
+CREATE TABLE order_items (\par
+    order_item_id INTEGER PRIMARY KEY,\par
+    order_id INTEGER,           \par
+    product_id INTEGER,        \par
+    quantity INTEGER\par
+);\par
+INSERT INTO customers (customer_id, city, status) VALUES\par
+(1, 'New York', 'completed'),\par
+(2, 'Los Angeles', 'pending'),\par
+(3, 'Chicago', 'completed'),\par
+(4, 'Houston', 'completed'),\par
+(5, 'Phoenix', 'pending');\par
+INSERT INTO products (product_id, category, price, stock_quantity) VALUES\par
+(1, 'Electronics', 299.99, 50),\par
+(2, 'Books', 19.99, 100),\par
+(3, 'Clothing', 49.99, 75),\par
+(4, 'Home', 99.99, 30),\par
+(5, 'Sports', 149.99, 20);\par
+INSERT INTO orders (order_id, customer_id, order_date) VALUES\par
+(1, 1, '2023-01-01 10:00:00'),\par
+(2, 2, '2023-01-02 11:30:00'),\par
+(3, 3, '2023-01-03 12:45:00'),\par
+(4, 1, '2023-01-04 09:15:00'),\par
+(5, 4, '2023-01-05 14:00:00');\par
+INSERT INTO order_items (order_item_id, order_id, product_id, quantity) VALUES\par
+(1, 1, 1, 2),  \par
+(2, 1, 3, 1), \par
+(3, 2, 2, 3), \par
+(4, 3, 4, 1),  \par
+(5, 4, 5, 2),  \par
+(6, 5, 1, 1);   \par
+1) Revenue Analysis by Category and State:\par
+Write a query that calculates the total revenue for each product category and groups the \par
+revenue by customer state. Include only completed orders.\par
+2) Top Customer by Category:\par
+Write a query to identify the top customer (in terms of total spend) for each product \par
+category. Include cases where there might be ties.\par
+3) Rolling Average Order Size:\par
+Calculate the rolling 7-day average of items sold for each product.\par
+1) \f1\lang1049\'c0\'ed\'e0\'eb\'e8\'e7 \'e2\'fb\'f0\'f3\'f7\'ea\'e8 \'ef\'ee \'ea\'e0\'f2\'e5\'e3\'ee\'f0\'e8\'ff\'ec \'e8 \'f8\'f2\'e0\'f2\'e0\'ec:\par
+\'cd\'e0\'ef\'e8\'f8\'e8\'f2\'e5 \'e7\'e0\'ef\'f0\'ee\'f1, \'ea\'ee\'f2\'ee\'f0\'fb\'e9 \'f0\'e0\'f1\'f1\'f7\'e8\'f2\'fb\'e2\'e0\'e5\'f2 \'ee\'e1\'f9\'f3\'fe \'e2\'fb\'f0\'f3\'f7\'ea\'f3 \'e4\'eb\'ff \'ea\'e0\'e6\'e4\'ee\'e9 \'ea\'e0\'f2\'e5\'e3\'ee\'f0\'e8\'e8 \'ef\'f0\'ee\'e4\'f3\'ea\'f2\'ee\'e2 \'e8 \'e3\'f0\'f3\'ef\'ef\'e8\'f0\'f3\'e5\'f2\par
+\'e2\'fb\'f0\'f3\'f7\'ea\'f3 \'ef\'ee \'f1\'ee\'f1\'f2\'ee\'ff\'ed\'e8\'fe \'ea\'eb\'e8\'e5\'ed\'f2\'ee\'e2. \'d3\'f7\'e8\'f2\'fb\'e2\'e0\'e9\'f2\'e5 \'f2\'ee\'eb\'fc\'ea\'ee \'e2\'fb\'ef\'ee\'eb\'ed\'e5\'ed\'ed\'fb\'e5 \'e7\'e0\'ea\'e0\'e7\'fb.\par
+2) \'cb\'f3\'f7\'f8\'e8\'e5 \'ea\'eb\'e8\'e5\'ed\'f2\'fb \'ef\'ee \'ea\'e0\'f2\'e5\'e3\'ee\'f0\'e8\'ff\'ec:\par
+\'cd\'e0\'ef\'e8\'f8\'e8\'f2\'e5 \'e7\'e0\'ef\'f0\'ee\'f1, \'f7\'f2\'ee\'e1\'fb \'ee\'ef\'f0\'e5\'e4\'e5\'eb\'e8\'f2\'fc \'f1\'e0\'ec\'ee\'e3\'ee \'ea\'f0\'f3\'ef\'ed\'ee\'e3\'ee \'ef\'ee\'ea\'f3\'ef\'e0\'f2\'e5\'eb\'ff (\'f1 \'f2\'ee\'f7\'ea\'e8 \'e7\'f0\'e5\'ed\'e8\'ff \'ee\'e1\'f9\'e8\'f5 \'f0\'e0\'f1\'f5\'ee\'e4\'ee\'e2) \'e4\'eb\'ff \'ea\'e0\'e6\'e4\'ee\'e9\par
+\'ea\'e0\'f2\'e5\'e3\'ee\'f0\'e8\'e8 \'f2\'ee\'e2\'e0\'f0\'ee\'e2. \'d3\'ea\'e0\'e6\'e8\'f2\'e5 \'f1\'eb\'f3\'f7\'e0\'e8, \'ea\'ee\'e3\'e4\'e0 \'ec\'ee\'e3\'f3\'f2 \'e1\'fb\'f2\'fc \'e2\'e7\'e0\'e8\'ec\'ee\'f1\'e2\'ff\'e7\'e8.\par
+3) \'d1\'f0\'e5\'e4\'ed\'e8\'e9 \'f0\'e0\'e7\'ec\'e5\'f0 \'e7\'e0\'ea\'e0\'e7\'e0 \'e7\'e0 7 \'e4\'ed\'e5\'e9:\par
+\'d0\'e0\'f1\'f1\'f7\'e8\'f2\'e0\'e9\'f2\'e5 \'f1\'f0\'e5\'e4\'ed\'e5\'e5 \'ea\'ee\'eb\'e8\'f7\'e5\'f1\'f2\'e2\'ee \'ef\'f0\'ee\'e4\'e0\'ed\'ed\'fb\'f5 \'f2\'ee\'e2\'e0\'f0\'ee\'e2 \'e7\'e0 7 \'e4\'ed\'e5\'e9 \'e4\'eb\'ff \'ea\'e0\'e6\'e4\'ee\'e3\'ee \'ef\'f0\'ee\'e4\'f3\'ea\'f2\'e0.\f0\lang9\par
+\fs40 1)\fs22\par
+with tables as(\par
+  select\par
+  \tab c.customer_id,\par
+  \tab c.status,\par
+  \tab o.order_id,\par
+  \tab oi.product_id,\par
+  \tab oi.quantity,\par
+  \tab p.category,\par
+  \tab p.price\par
+  from Customers as c\par
+  join Orders o on c.customer_id = o.customer_id\par
+  join Order_items oi on o.order_id = oi.order_id\par
+  join Products p on oi.product_id = p.product_id\par
+  where c.status = "completed"\par
+)\par
+select\par
+\tab category,\par
+\tab status,\par
+    SUM(quantity*price) as sem\par
+from tables\par
+group by category,status\par
+order by sem desc    \par
+\fs44 2)\fs22\par
+with tables as(\par
+  select\par
+  \tab c.customer_id,\par
+  \tab o.order_id,\par
+  \tab oi.product_id,\par
+  \tab oi.quantity,\par
+  \tab p.category,\par
+  \tab p.price\par
+  from Customers as c\par
+  join Orders o on c.customer_id = o.customer_id\par
+  join Order_items oi on o.order_id = oi.order_id\par
+  join Products p on oi.product_id = p.product_id\par
+),\par
+tab as(select \par
+\tab customer_id,\par
+    category,\par
+    sum(quantity*price) as total\par
+from tables\par
+group by customer_id,category\par
+)\par
+select \par
+\tab customer_id,\par
+    category,\par
+    max(total) as tot\par
+from tab\par
+group by category\par
+\par
+\b\fs40 3)\par
+\b0\fs22 WITH sales_data AS (\par
+    SELECT\par
+        oi.product_id,\par
+        oi.quantity,\par
+        o.order_date\par
+    FROM \par
+        order_items oi\par
+    JOIN \par
+        orders o ON oi.order_id = o.order_id\par
+),\par
+rolling_avg AS (\par
+    SELECT\par
+        product_id,\par
+        order_date,\par
+        AVG(quantity) OVER (\par
+            PARTITION BY product_id\par
+            ORDER BY order_date\par
+            ROWS BETWEEN 6 PRECEDING AND CURRENT ROW\par
+        ) AS rolling_avg_7_days\par
+    FROM \par
+        sales_data\par
+)\par
+SELECT\par
+    product_id,\par
+    order_date,\par
+    rolling_avg_7_days\par
+FROM \par
+    rolling_avg\par
+ORDER BY\par
+    product_id, order_date;\par
+\par
+\b\fs40\lang1033 Exercise - 2\par
+\b0\f1\fs24\lang1049 CREATE TABLE employees (\par
+    employee_id INTEGER PRIMARY KEY,\par
+    department_id INTEGER,\par
+    hourly_rate NUMERIC(10, 2)\par
+);\par
+\par
+CREATE TABLE departments (\par
+    department_id INTEGER PRIMARY KEY,\par
+    budget NUMERIC(10, 2)\par
+);\par
+\par
+CREATE TABLE projects (\par
+    project_id INTEGER PRIMARY KEY,\par
+    department_id INTEGER,\par
+    total_hours_allocated INTEGER\par
+);\par
+\par
+CREATE TABLE employee_projects (\par
+    employee_project_id INTEGER PRIMARY KEY,\par
+    employee_id INTEGER,\par
+    project_id INTEGER,\par
+    hours_worked INTEGER\par
+);\par
+\par
+INSERT INTO departments (department_id, budget) VALUES\par
+(1, 5000.00),       \par
+(2, 7000.00),       \par
+(3, 4500.00);       \par
+\par
+INSERT INTO employees (employee_id, department_id, hourly_rate) VALUES\par
+(1, 1, 30.00\par
+(2, 1, 35.00),      \par
+(3, 2, 40.00),      \par
+(4, 2, 45.00),      \par
+(5, 3, 25.00),      \par
+(6, 3, 20.00);      \par
+\par
+INSERT INTO projects (project_id, department_id, total_hours_allocated) VALUES\par
+(1, 1, 120),        \par
+(2, 2, 150),       \par
+(3, 3, 80);         \par
+INSERT INTO employee_projects (employee_project_id, employee_id, project_id, hours_worked) VALUES\par
+(1, 1, 1, 40),      \par
+(2, 2, 1, 50),      \par
+(3, 3, 2, 60),      \par
+(4, 4, 2, 70),      \par
+(5, 5, 3, 30),      \par
+(6, 6, 3, 20),      \par
+(7, 1, 1, 10),      \par
+(8, 2, 1, 20);      \par
+1) Cross-Department Budget Check:\par
+Identify projects where the sum of hours_worked multiplied by the hourly_rate exceeds \par
+the department\rquote s budget.\par
+2) Employee Overload Check:\par
+Write a recursive query to find employees working over 40 hours a week on average \par
+across all projects over the last month.\par
+3) Quarterly Department Cost Analysis:\par
+Calculate total costs per department per quarter. Include only departments that exceed \par
+their budget\par
+1) \'cf\'f0\'ee\'e2\'e5\'f0\'ea\'e0 \'e1\'fe\'e4\'e6\'e5\'f2\'e0 \'ec\'e5\'e6\'e4\'f3 \'ef\'ee\'e4\'f0\'e0\'e7\'e4\'e5\'eb\'e5\'ed\'e8\'ff\'ec\'e8:\par
+\'c2\'fb\'ff\'e2\'eb\'e5\'ed\'e8\'e5 \'ef\'f0\'ee\'e5\'ea\'f2\'ee\'e2, \'e2 \'ea\'ee\'f2\'ee\'f0\'fb\'f5 \'f1\'f3\'ec\'ec\'e0 \'ee\'f2\'f0\'e0\'e1\'ee\'f2\'e0\'ed\'ed\'fb\'f5 \'f7\'e0\'f1\'ee\'e2, \'f3\'ec\'ed\'ee\'e6\'e5\'ed\'ed\'e0\'ff \'ed\'e0 \'f7\'e0\'f1\'ee\'e2\'f3\'fe \'f1\'f2\'e0\'e2\'ea\'f3, \'ef\'f0\'e5\'e2\'fb\'f8\'e0\'e5\'f2\par
+\'e1\'fe\'e4\'e6\'e5\'f2 \'ee\'f2\'e4\'e5\'eb\'e0.\par
+2) \'cf\'f0\'ee\'e2\'e5\'f0\'ea\'e0 \'ef\'e5\'f0\'e5\'e3\'f0\'f3\'e7\'ea\'e8 \'f1\'ee\'f2\'f0\'f3\'e4\'ed\'e8\'ea\'ee\'e2:\par
+\'cd\'e0\'ef\'e8\'f8\'e8\'f2\'e5 \'f0\'e5\'ea\'f3\'f0\'f1\'e8\'e2\'ed\'fb\'e9 \'e7\'e0\'ef\'f0\'ee\'f1, \'f7\'f2\'ee\'e1\'fb \'ed\'e0\'e9\'f2\'e8 \'f1\'ee\'f2\'f0\'f3\'e4\'ed\'e8\'ea\'ee\'e2, \'ea\'ee\'f2\'ee\'f0\'fb\'e5 \'e2 \'f1\'f0\'e5\'e4\'ed\'e5\'ec \'f0\'e0\'e1\'ee\'f2\'e0\'eb\'e8 \'e1\'ee\'eb\'e5\'e5 40 \'f7\'e0\'f1\'ee\'e2 \'e2 \'ed\'e5\'e4\'e5\'eb\'fe\par
+\'ef\'ee \'e2\'f1\'e5\'ec \'ef\'f0\'ee\'e5\'ea\'f2\'e0\'ec \'e7\'e0 \'ef\'ee\'f1\'eb\'e5\'e4\'ed\'e8\'e9 \'ec\'e5\'f1\'ff\'f6.\par
+3) \'c5\'e6\'e5\'ea\'e2\'e0\'f0\'f2\'e0\'eb\'fc\'ed\'fb\'e9 \'e0\'ed\'e0\'eb\'e8\'e7 \'e7\'e0\'f2\'f0\'e0\'f2 \'ee\'f2\'e4\'e5\'eb\'e0:\par
+\'d0\'e0\'f1\'f1\'f7\'e8\'f2\'e0\'e9\'f2\'e5 \'ee\'e1\'f9\'e8\'e5 \'e7\'e0\'f2\'f0\'e0\'f2\'fb \'ed\'e0 \'ee\'f2\'e4\'e5\'eb \'e7\'e0 \'ea\'e2\'e0\'f0\'f2\'e0\'eb. \'c2\'ea\'eb\'fe\'f7\'e8\'f2\'e5 \'f2\'ee\'eb\'fc\'ea\'ee \'f2\'e5 \'ee\'f2\'e4\'e5\'eb\'fb, \'ea\'ee\'f2\'ee\'f0\'fb\'e5 \'ef\'f0\'e5\'e2\'fb\'f8\'e0\'fe\'f2\par
+\'f1\'e2\'ee\'e9 \'e1\'fe\'e4\'e6\'e5\'f2\b\f0\fs40\lang1033\par
+\lang9 1)\par
+\b0\fs22 with tas as(\par
+\tab select \par
+  \tab\tab d.department_id,\par
+  \tab\tab d.budget,\par
+  \tab\tab e.employee_id,\par
+  \tab\tab e.hourly_rate,\par
+  \tab\tab p.project_id,\par
+  \tab\tab ep.employee_project_id,\par
+  \tab\tab ep.hours_worked\par
+    from Departments d\par
+  \tab join Employees e on d.department_id = e.department_id\par
+  \tab join Projects p on d.department_id = p.department_id\par
+  \tab join Employee_projects ep on p.project_id = ep.project_id\par
+)\par
+select \par
+\tab project_id,\par
+    SUM(hours_worked*hourly_rate)as tot\par
+from tas \par
+group by project_id\par
+having tot > budget\par
+\b\fs40\par
+\f1\lang1049 2)\par
+\b0\f0\fs22\lang9 ALTER TABLE projects\par
+ADD COLUMN project_date DATE;\par
+UPDATE projects\par
+SET project_date = '2023-01-01'\par
+WHERE project_id = 1;\par
+\par
+UPDATE projects\par
+SET project_date = '2023-02-01'\par
+WHERE project_id = 2;\par
+\par
+UPDATE projects\par
+SET project_date = '2023-03-01'\par
+WHERE project_id = 3;\par
+\par
+WITH RECURSIVE Employee_Work_Hours AS (\par
+   \par
+    SELECT \par
+        ep.employee_id,\par
+        SUM(ep.hours_worked) AS total_hours,\par
+        COUNT(DISTINCT strftime('%W', p.project_date)) AS total_weeks\par
+    FROM employee_projects ep\par
+    JOIN projects p ON ep.project_id = p.project_id\par
+    WHERE p.project_date >= DATE('now', '-30 day')\par
+    GROUP BY ep.employee_id\par
+),\par
+Average_Hours_Per_Week AS (\par
+    \par
+    SELECT \par
+        employee_id,\par
+        total_hours / total_weeks AS avg_hours_per_week\par
+    FROM Employee_Work_Hours\par
+)\par
+\par
+SELECT \par
+    e.employee_id,\par
+    e.avg_hours_per_week\par
+FROM Average_Hours_Per_Week e\par
+WHERE e.avg_hours_per_week > 40;\par
+\b\fs40\par
+\f1\lang1049 3)\par
+\b0\f0\fs22\lang9 INSERT INTO employee_projects (employee_project_id, employee_id, project_id, hours_worked)\par
+VALUES (9, 1, 1, 100);\par
+\par
+\par
+SELECT \par
+    e.department_id,\par
+    strftime('%Y', p.project_date) AS year,\par
+    (strftime('%m', p.project_date) - 1) / 3 + 1 AS quarter,\par
+    SUM(ep.hours_worked * e.hourly_rate) AS total_cost,\par
+    d.budget\par
+FROM employee_projects ep\par
+JOIN projects p ON ep.project_id = p.project_id\par
+JOIN employees e ON ep.employee_id = e.employee_id\par
+JOIN departments d ON e.department_id = d.department_id\par
+GROUP BY e.department_id, year, quarter\par
+HAVING total_cost > d.budget\par
+ORDER BY e.department_id, year, quarter;\b\fs40\par
+}
+ 
