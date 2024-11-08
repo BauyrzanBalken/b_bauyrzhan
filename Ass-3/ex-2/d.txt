@@ -1,0 +1,68 @@
+CREATE TABLE employees (
+    employee_id INTEGER PRIMARY KEY,
+    department_id INTEGER,
+    hourly_rate NUMERIC(10, 2)
+);
+
+CREATE TABLE departments (
+    department_id INTEGER PRIMARY KEY,
+    budget NUMERIC(10, 2)
+);
+
+CREATE TABLE projects (
+    project_id INTEGER PRIMARY KEY,
+    department_id INTEGER,
+    total_hours_allocated INTEGER
+);
+
+CREATE TABLE employee_projects (
+    employee_project_id INTEGER PRIMARY KEY,
+    employee_id INTEGER,
+    project_id INTEGER,
+    hours_worked INTEGER
+);
+
+INSERT INTO departments (department_id, budget) VALUES
+(1, 5000.00),       
+(2, 7000.00),       
+(3, 4500.00);       
+
+INSERT INTO employees (employee_id, department_id, hourly_rate) VALUES
+(1, 1, 30.00
+(2, 1, 35.00),      
+(3, 2, 40.00),      
+(4, 2, 45.00),      
+(5, 3, 25.00),      
+(6, 3, 20.00);      
+
+INSERT INTO projects (project_id, department_id, total_hours_allocated) VALUES
+(1, 1, 120),        
+(2, 2, 150),       
+(3, 3, 80);         
+INSERT INTO employee_projects (employee_project_id, employee_id, project_id, hours_worked) VALUES
+(1, 1, 1, 40),      
+(2, 2, 1, 50),      
+(3, 3, 2, 60),      
+(4, 4, 2, 70),      
+(5, 5, 3, 30),      
+(6, 6, 3, 20),      
+(7, 1, 1, 10),      
+(8, 2, 1, 20);      
+1) Cross-Department Budget Check:
+Identify projects where the sum of hours_worked multiplied by the hourly_rate exceeds 
+the department’s budget.
+2) Employee Overload Check:
+Write a recursive query to find employees working over 40 hours a week on average 
+across all projects over the last month.
+3) Quarterly Department Cost Analysis:
+Calculate total costs per department per quarter. Include only departments that exceed 
+their budget
+1) Проверка бюджета между подразделениями:
+Выявление проектов, в которых сумма отработанных часов, умноженная на часовую ставку, превышает
+бюджет отдела.
+2) Проверка перегрузки сотрудников:
+Напишите рекурсивный запрос, чтобы найти сотрудников, которые в среднем работали более 40 часов в неделю
+по всем проектам за последний месяц.
+3) Ежеквартальный анализ затрат отдела:
+Рассчитайте общие затраты на отдел за квартал. Включите только те отделы, которые превышают
+свой бюджет

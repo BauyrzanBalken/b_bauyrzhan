@@ -1,0 +1,30 @@
+WITH sales_data AS (
+    SELECT
+        oi.product_id,
+        oi.quantity,
+        o.order_date
+    FROM 
+        order_items oi
+    JOIN 
+        orders o ON oi.order_id = o.order_id
+),
+rolling_avg AS (
+    SELECT
+        product_id,
+        order_date,
+        AVG(quantity) OVER (
+            PARTITION BY product_id
+            ORDER BY order_date
+            ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+        ) AS rolling_avg_7_days
+    FROM 
+        sales_data
+)
+SELECT
+    product_id,
+    order_date,
+    rolling_avg_7_days
+FROM 
+    rolling_avg
+ORDER BY
+    product_id, order_date;

@@ -1,0 +1,38 @@
+ALTER TABLE projects
+ADD COLUMN project_date DATE;
+UPDATE projects
+SET project_date = '2023-01-01'
+WHERE project_id = 1;
+
+UPDATE projects
+SET project_date = '2023-02-01'
+WHERE project_id = 2;
+
+UPDATE projects
+SET project_date = '2023-03-01'
+WHERE project_id = 3;
+
+WITH RECURSIVE Employee_Work_Hours AS (
+   
+    SELECT 
+        ep.employee_id,
+        SUM(ep.hours_worked) AS total_hours,
+        COUNT(DISTINCT strftime('%W', p.project_date)) AS total_weeks
+    FROM employee_projects ep
+    JOIN projects p ON ep.project_id = p.project_id
+    WHERE p.project_date >= DATE('now', '-30 day')
+    GROUP BY ep.employee_id
+),
+Average_Hours_Per_Week AS (
+    
+    SELECT 
+        employee_id,
+        total_hours / total_weeks AS avg_hours_per_week
+    FROM Employee_Work_Hours
+)
+
+SELECT 
+    e.employee_id,
+    e.avg_hours_per_week
+FROM Average_Hours_Per_Week e
+WHERE e.avg_hours_per_week > 40;

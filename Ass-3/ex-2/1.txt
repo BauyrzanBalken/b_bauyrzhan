@@ -1,0 +1,20 @@
+with tas as(
+	select 
+  		d.department_id,
+  		d.budget,
+  		e.employee_id,
+  		e.hourly_rate,
+  		p.project_id,
+  		ep.employee_project_id,
+  		ep.hours_worked
+    from Departments d
+  	join Employees e on d.department_id = e.department_id
+  	join Projects p on d.department_id = p.department_id
+  	join Employee_projects ep on p.project_id = ep.project_id
+)
+select 
+	project_id,
+    SUM(hours_worked*hourly_rate)as tot
+from tas 
+group by project_id
+having tot > budget
