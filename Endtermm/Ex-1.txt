@@ -1,0 +1,106 @@
+Ex-1
+CREATE TABLE CustomerData (
+    CustomerID INT PRIMARY KEY,
+    Age INT,
+    Gender VARCHAR(10),
+    ItemPurchased VARCHAR(50),
+    Category VARCHAR(50),
+    PurchaseAmountUSD DECIMAL(10, 2),
+    Location VARCHAR(50),
+    Size VARCHAR(10),
+    Color VARCHAR(20),
+    Season VARCHAR(20)
+);
+INSERT INTO CustomerData (CustomerID, Age, Gender, ItemPurchased, Category, PurchaseAmountUSD, Location, Size, Color, Season) VALUES
+(1, 55, 'Male', 'Blouse', 'Clothing', 53, 'Kentucky', 'L', 'Gray', 'Winter'),
+(2, 19, 'Male', 'Sweater', 'Clothing', 64, 'Maine', 'L', 'Maroon', 'Winter'),
+(3, 50, 'Male', 'Jeans', 'Clothing', 73, 'Massachusetts', 'S', 'Maroon', 'Spring'),
+(4, 21, 'Male', 'Sandals', 'Footwear', 90, 'Rhode Island', 'M', 'Maroon', 'Spring'),
+(5, 45, 'Male', 'Blouse', 'Clothing', 49, 'Oregon', 'M', 'Turquoise', 'Spring'),
+(6, 46, 'Male', 'Sneakers', 'Footwear', 20, 'Wyoming', 'M', 'White', 'Summer'),
+(7, 63, 'Male', 'Shirt', 'Clothing', 85, 'Montana', 'M', 'Gray', 'Fall'),
+(8, 27, 'Male', 'Shorts', 'Clothing', 34, 'Louisiana', 'L', 'Charcoal', 'Winter'),
+(9, 26, 'Male', 'Coat', 'Outerwear', 97, 'West Virginia', 'L', 'Silver', 'Summer'),
+(10, 57, 'Male', 'Handbag', 'Accessories', 31, 'Missouri', 'M', 'Pink', 'Spring'),
+(11, 53, 'Male', 'Shoes', 'Footwear', 34, 'Arkansas', 'L', 'Purple', 'Fall'),
+(12, 30, 'Male', 'Shorts', 'Clothing', 68, 'Hawaii', 'S', 'Olive', 'Winter'),
+(13, 61, 'Male', 'Coat', 'Outerwear', 72, 'Delaware', 'M', 'Gold', 'Winter'),
+(14, 65, 'Male', 'Dress', 'Clothing', 51, 'New Hampshire', 'M', 'Violet', 'Spring'),
+(15, 64, 'Male', 'Coat', 'Outerwear', 53, 'New York', 'L', 'Teal', 'Winter'),
+(16, 64, 'Male', 'Skirt', 'Clothing', 81, 'Rhode Island', 'M', 'Teal', 'Winter'),
+(17, 25, 'Male', 'Sunglasses', 'Accessories', 36, 'Alabama', 'S', 'Gray', 'Spring'),
+(18, 53, 'Male', 'Dress', 'Clothing', 38, 'Mississippi', 'XL', 'Lavender', 'Winter'),
+(19, 52, 'Male', 'Sweater', 'Clothing', 48, 'Montana', 'S', 'Black', 'Summer'),
+(20, 66, 'Male', 'Pants', 'Clothing', 90, 'Rhode Island', 'M', 'Green', 'Summer'),
+(21, 21, 'Male', 'Pants', 'Clothing', 51, 'Louisiana', 'M', 'Black', 'Winter'),
+(22, 31, 'Male', 'Pants', 'Clothing', 62, 'North Carolina', 'M', 'Charcoal', 'Winter'),
+(23, 56, 'Male', 'Pants', 'Clothing', 37, 'California', 'M', 'Peach', 'Summer'),
+(24, 31, 'Male', 'Pants', 'Clothing', 88, 'Oklahoma', 'XL', 'White', 'Winter'),
+(25, 18, 'Male', 'Jacket', 'Outerwear', 22, 'Florida', 'M', 'Green', 'Fall'),
+(26, 18, 'Male', 'Hoodie', 'Clothing', 25, 'Texas', 'M', 'Silver', 'Summer'),
+(27, 38, 'Male', 'Jewelry', 'Accessories', 20, 'Nevada', 'M', 'Red', 'Spring'),
+(28, 56, 'Male', 'Shorts', 'Clothing', 56, 'Kentucky', 'L', 'Cyan', 'Summer'),
+(29, 54, 'Male', 'Handbag', 'Accessories', 94, 'North Carolina', 'M', 'Gray', 'Fall'),
+(30, 31, 'Male', 'Dress', 'Clothing', 48, 'Wyoming', 'S', 'Black', 'Fall'),
+(31, 57, 'Male', 'Jewelry', 'Accessories', 31, 'North Carolina', 'L', 'Black', 'Winter'),
+(32, 33, 'Male', 'Dress', 'Clothing', 79, 'West Virginia', 'L', 'Brown', 'Winter'),
+(33, 36, 'Male', 'Jacket', 'Outerwear', 67, 'Kansas', 'M', 'Silver', 'Summer');
+
+
+QUERIES
+1)
+Сумма покупок для каждого местоположения
+select  
+	Location, 
+	SUM(PurchaseAmountUSD) AS TotalPurch
+from CustomerData
+group by Location;
+2)
+Поиск топ-5 покупателей с наибольшими расходами
+select 
+	CustomerID, 
+	SUM(PurchaseAmountUSD) AS TotalSpent
+from CustomerData
+group by CustomerID
+order by TotalSpent desc
+limit 5;
+3)
+Средняя сумма покупки по каждому сезону
+SELECT 
+	Season, 
+	AVG(PurchaseAmountUSD) AS AverageSpend
+FROM CustomerData
+GROUP BY Season
+4)
+Количество покупок по категориям
+SELECT 
+	Category, 
+	COUNT(*) AS PurchaseCount
+FROM CustomerData
+GROUP BY Category
+ORDER BY PurchaseCount DESC;
+5)
+Выбор клиентов, купивших товары определенного размера и цвета
+SELECT 
+	CustomerID, 
+	ItemPurchased, 
+	Size, 
+	Color
+FROM CustomerData
+WHERE Size = 'M' AND Color = 'Gray';
+6)
+Определение штатов с самым большим числом покупателей уникального размера
+WITH UniqueSizeCounts AS (
+    SELECT 
+		Location, 
+		Size, 
+		COUNT(DISTINCT CustomerID) AS UniqueCustomers
+    FROM CustomerData
+    GROUP BY Location, Size
+)
+SELECT 
+	Location, 
+	SUM(UniqueCustomers) AS TotalUniqueCustomers
+FROM UniqueSizeCounts
+GROUP BY Location
+ORDER BY TotalUniqueCustomers DESC;

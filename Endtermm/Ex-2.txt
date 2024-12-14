@@ -1,0 +1,87 @@
+Ex-2
+CREATE TABLE Person(
+    PersonID INT PRIMARY KEY,
+    Gender VARCHAR(10),
+    Age INT,
+    Occupation VARCHAR(50),
+    SleepDuration DECIMAL(4, 2),
+    QualityOfSleep INT,
+    PhysicalActivityLevel INT,
+    StressLevel INT,
+    BMICategory VARCHAR(20),
+    BloodPressure VARCHAR(10)
+);
+INSERT INTO Person (PersonID, Gender, Age, Occupation, SleepDuration, QualityOfSleep, PhysicalActivityLevel, StressLevel, BMICategory, BloodPressure)
+VALUES
+(1, 'Male', 27, 'Software Engineer', 6.1, 6, 42, 6, 'Overweight', '126/83'),
+(2, 'Male', 28, 'Doctor', 6.2, 6, 60, 8, 'Normal', '125/80'),
+(3, 'Male', 28, 'Doctor', 6.2, 6, 60, 8, 'Normal', '125/80'),
+(4, 'Male', 28, 'Sales Representative', 5.9, 4, 30, 8, 'Obese', '140/90'),
+(5, 'Female', 34, 'Teacher', 7.5, 8, 50, 5, 'Normal Weight', '120/75'),
+(6, 'Female', 45, 'Manager', 6.8, 7, 35, 7, 'Overweight', '135/85'),
+(7, 'Male', 30, 'Engineer', 6.0, 5, 45, 6, 'Normal', '123/82'),
+(8, 'Female', 22, 'Student', 7.9, 9, 70, 3, 'Underweight', '115/70'),
+(9, 'Male', 41, 'Lawyer', 5.7, 4, 25, 8, 'Obese', '145/95'),
+(10, 'Female', 29, 'Nurse', 6.5, 6, 60, 6, 'Normal Weight', '118/76'),
+(11, 'Male', 36, 'Electrician', 6.3, 7, 50, 5, 'Overweight', '128/84'),
+(12, 'Female', 38, 'Designer', 7.0, 8, 55, 4, 'Normal Weight', '119/75'),
+(13, 'Male', 25, 'Analyst', 6.4, 6, 40, 7, 'Normal', '122/78'),
+(14, 'Female', 32, 'Researcher', 7.1, 9, 65, 4, 'Normal Weight', '116/74'),
+(15, 'Male', 47, 'Teacher', 5.6, 3, 20, 9, 'Obese', '150/98'),
+(16, 'Female', 28, 'Pharmacist', 6.9, 7, 50, 6, 'Normal Weight', '117/75'),
+(17, 'Male', 33, 'Driver', 5.8, 4, 30, 8, 'Overweight', '140/90'),
+(18, 'Female', 40, 'Chef', 6.7, 7, 45, 5, 'Normal Weight', '122/77'),
+(19, 'Male', 26, 'Architect', 6.6, 6, 50, 6, 'Normal', '125/79'),
+(20, 'Female', 24, 'Engineer', 7.3, 8, 65, 4, 'Normal Weight', '120/75'),
+(21, 'Male', 35, 'Salesperson', 5.5, 4, 30, 8, 'Obese', '150/100'),
+(22, 'Female', 37, 'Consultant', 6.8, 7, 55, 5, 'Normal Weight', '121/76'),
+(23, 'Male', 29, 'Artist', 6.2, 6, 45, 6, 'Overweight', '130/85'),
+(24, 'Female', 30, 'Psychologist', 7.4, 8, 60, 4, 'Normal Weight', '119/74'),
+(25, 'Male', 42, 'Mechanic', 5.9, 4, 35, 8, 'Overweight', '142/92'),
+(26, 'Female', 39, 'Journalist', 7.0, 7, 50, 5, 'Normal Weight', '118/73'),
+(27, 'Male', 31, 'Accountant', 6.1, 6, 40, 6, 'Normal', '124/78'),
+(28, 'Female', 23, 'Student', 7.8, 9, 70, 3, 'Underweight', '114/72'),
+(29, 'Male', 48, 'Farmer', 5.6, 3, 20, 9, 'Obese', '155/100'),
+(30, 'Female', 25, 'Designer', 6.9, 7, 55, 4, 'Normal Weight', '117/74');
+select * from Person
+
+QUERIES
+1)
+среднего значения продолжительности сна
+SELECT Gender, AVG(SleepDuration) AS AverageSleepDuration
+FROM Person
+GROUP BY Gender;
+2)давление выше 140/90
+SELECT PersonID, Gender, Age, Occupation, BloodPressure
+FROM Person
+WHERE BloodPressure > '140/90';
+3) физической активности выше 50,продолжительность сна ниже средней и у которых стрессы выше 7
+WITH AvgSleep AS (
+    SELECT AVG(SleepDuration) AS AvgSleepDuration
+    FROM Person
+)
+SELECT PersonID, Gender, Age, Occupation, PhysicalActivityLevel, SleepDuration, StressLevel
+FROM Person, AvgSleep
+WHERE PhysicalActivityLevel > 50
+  AND SleepDuration < (SELECT AvgSleepDuration FROM AvgSleep)
+  AND StressLevel > 7;
+4)
+людей чье кровяное давление превышает норму (130/80), с учетом их профессии и стресса выше 7
+SELECT PersonID, Gender, Age, Occupation, BloodPressure, StressLevel
+FROM Person
+WHERE (CAST(SUBSTRING(BloodPressure, 1, 3) AS INT) > 130 OR CAST(SUBSTRING(BloodPressure, 5, 2) AS INT) > 80)
+  AND StressLevel > 7;
+5)продолжительность сна ниже средней и уровень стресса выше среднего
+WITH AvgSleep AS (
+    SELECT AVG(SleepDuration) AS AvgSleepDuration
+    FROM Person
+),
+AvgStress AS (
+    SELECT AVG(StressLevel) AS AvgStressLevel
+    FROM Person
+)
+SELECT PersonID, Gender, Age, Occupation, SleepDuration, StressLevel
+FROM Person
+WHERE SleepDuration < (SELECT AvgSleepDuration FROM AvgSleep)
+  AND StressLevel > (SELECT AvgStressLevel FROM AvgStress)
+ORDER BY StressLevel DESC;
